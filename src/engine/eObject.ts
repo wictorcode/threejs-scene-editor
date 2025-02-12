@@ -11,6 +11,10 @@ export class eObject {
         this.objectMesh = new THREE.Mesh(this.objectGeometry, this.objectMaterial)
     }
 
+    /**
+     * 
+     * @returns The BufferGeometry of the Object
+     */
     getGeometry(): THREE.BufferGeometry {
         return this.objectGeometry
     }
