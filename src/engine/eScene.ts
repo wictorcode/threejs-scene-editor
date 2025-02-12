@@ -7,10 +7,24 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
  */
 export class eScene {
 
+    //------------------------------------------------------
+    // THREEJS BOILERPLATE CODE
+    //------------------------------------------------------
     private scene = new THREE.Scene();
     private camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
     private renderer = new THREE.WebGLRenderer();
     private controls = new OrbitControls(this.camera, this.renderer.domElement)
+
+    //------------------------------------------------------
+    // ATTRIBUTES
+    //------------------------------------------------------
+    private lastId: number = 1;
+    private objectsInScene: {[key: number]: eObject} = {};
+    private currentlySelectedObjectId: number | undefined;
+
+    //------------------------------------------------------
+    // METHODS
+    //------------------------------------------------------
     constructor() {
         this.scene = new THREE.Scene();
         this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -27,6 +41,8 @@ export class eScene {
      */
     public addObjectToScene(object: eObject) {
         this.scene.add(object.getMesh())
+        this.objectsInScene[this.lastId] = object
+        this.lastId++;
     }
 
     /**
@@ -37,8 +53,23 @@ export class eScene {
         this.scene.remove(object.getMesh())
     }
 
+    public removeObjectFromSceneById(id: number) {
+        this.scene.remove(this.objectsInScene[id].getMesh())
+    }
+
+    public setCurrentlySelectedObjec(object: eObject) {}
+
     public render = () => {
         requestAnimationFrame( this.render );
+        //=====================================//
+        //===== UPDATE ALL VARIABLES HERE =====//
+        //=====================================//
+        
+        if (this.scene.children[0]) {
+            this.scene.children[0].position.x += 0.01
+        }
+
+        //=====================================//
         this.renderer.render( this.scene, this.camera );
     }
 }
